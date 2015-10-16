@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Implicit Judgment of Isolated Notes</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="jspsych-4.3/jspsych.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-text.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-single-audio.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-single-stim.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-multi-stim-multi-response.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-survey-text.js"></script>
+    <link href="jspsych-4.3/css/jspsych.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <script>
+      var i;
+      
+      var subjectID = Date.now();
+      jsPsych.data.addProperties({subject: subjectID});
+      
+      var experiment = [];
+      
+      var welcome = {
+        type: "text",
+        text: '<p>Welcome to the experiment.</p>' +
+              '<p>In this experiment, you will judge various musical notes that you hear.</p>' +
+              '<p>On each trial, you will hear a single musical note played. Sometimes, the note will be "in-tune," while other times the note will be "out-of-tune."  Your task is to judge whether you think the note was "in-tune" or "out-of-tune."</p>' +
+              '<p>For reference, an "in-tune" note corresponds to a note that you would commonly hear in your listening environment, while an "out-of-tune" note would sound "wrong" in the context of your listening environment. Thus, another way to think of the task is to judge whether the note you hear sounds "good / right" or "bad / wrong."</p>' +
+              '<p>While this may seem like a difficult task, please make your best guess on each trial. When you are ready to begin, press any key.</p>',
+        timing_post_trial: 0
+      };
+      
+      experiment.push(welcome);
+      
+      var filePaths = [];
+      var folder = "implicit_judgment_of_isolated_notes_stimuli/";
+      var files = ['A0.wav', 'A#0.wav', 'B0.wav', 'C0.wav', 'C#0.wav', 'D0.wav', 'D#0.wav', 'E0.wav', 'F0.wav', 'F#0.wav', 'G0.wav', 'G#0.wav', 'A50.wav', 'A#50.wav', 'B50.wav', 'C50.wav', 'C#50.wav', 'D50.wav', 'D#50.wav', 'E50.wav', 'F50.wav', 'F#50.wav', 'G50.wav', 'G#50.wav', 'tA0.wav', 'tA#0.wav', 'tB0.wav', 'tC0.wav', 'tC#0.wav', 'tD0.wav', 'tD#0.wav', 'tE0.wav', 'tF0.wav', 'tF#0.wav', 'tG0.wav', 'tG#0.wav', 'tA50.wav', 'tA#50.wav', 'tB50.wav', 'tC50.wav', 'tC#50.wav', 'tD50.wav', 'tD#50.wav', 'tE50.wav', 'tF50.wav', 'tF#50.wav', 'tG50.wav', 'tG#50.wav', 'pA0.wav', 'pA#0.wav', 'pB0.wav', 'pC0.wav', 'pC#0.wav', 'pD0.wav', 'pD#0.wav', 'pE0.wav', 'pF0.wav', 'pF#0.wav', 'pG0.wav', 'pG#0.wav', 'pA50.wav', 'pA#50.wav', 'pB50.wav', 'pC50.wav', 'pC#50.wav', 'pD50.wav', 'pD#50.wav', 'pE50.wav', 'pF50.wav', 'pF#50.wav', 'pG50.wav', 'pG#50.wav', 'vA0.wav', 'vA#0.wav', 'vB0.wav', 'vC0.wav', 'vC#0.wav', 'vD0.wav', 'vD#0.wav', 'vE0.wav', 'vF0.wav', 'vF#0.wav', 'vG0.wav', 'vG#0.wav', 'vA50.wav', 'vA#50.wav', 'vB50.wav', 'vC50.wav', 'vC#50.wav', 'vD50.wav', 'vD#50.wav', 'vE50.wav', 'vF50.wav', 'vF#50.wav', 'vG50.wav', 'vG#50.wav'];
+      
+      var numFiles = files.length;
+      
+      for (i = 0; i < numFiles; i += 1) {
+        filePaths.push(folder + encodeURIComponent(files[i]));
+      }
+      
+      var allStimuli = jsPsych.randomization.shuffle(filePaths);
+      
+      var fixation = {
+        type: "multi-stim-multi-response",
+        stimuli: [["***", "**", "*"]],
+        is_html: true,
+        timing_stim: [500, 500, 500],
+        timing_response: 1500,
+        choices: [null, null, null],
+        response_ends_trial: false,
+        timing_post_trial: 0
+      };
+      
+      var whiteNoise = {
+        type: "single-audio",
+        stimuli: [folder + "whitenoise.wav"],
+        timing_response: 10000,
+        response_ends_trial: false,
+        timing_post_trial: 1000
+      };
+      
+      for (i = 0; i < numFiles; i += 1) {
+        var timbre;
+        var stimulus = allStimuli[i];
+        
+        var trial = {
+          type: "single-audio",
+          stimuli: [stimulus],
+          timing_response: 1000,
+          response_ends_trial: false,
+          timing_post_trial: 0
+        };
+        
+        var filePath = decodeURIComponent(stimulus);
+        var correct = filePath.indexOf("50") > -1 ? "out" : "in";
+        if (filePath.indexOf("/p") > -1) {
+          timbre = "piano";
+        } else if (filePath.indexOf("/v") > -1) {
+          timbre = "violin";
+        } else if (filePath.indexOf("/t") > -1) {
+          timbre = "triangle";
+        } else {
+          timbre = "sine";
+        }
+        
+        var response = {
+          type: "single-stim",
+          stimuli: ['<p>Was the note you just heard in-tune or out-of-tune?</p>' +
+                    '<p>(Press "q" if you thought the note was in-tune. Press "p" if you thought the note was out-of-tune.)</p>' +
+                    '<p>If you are not sure, please make your best guess.</p>'],
+          is_html: true,
+          choices: ["q", "p"],
+          data: [{
+            file: filePath,
+            correct: correct,
+            timbre: timbre
+          }],
+          timing_post_trial: 0
+        };
+        
+        experiment.push(fixation);
+        experiment.push(trial);
+        experiment.push(response);
+        experiment.push(whiteNoise);
+      }
+      
+      var questionnaire = {
+        type: "survey-text",
+        preamble: ['The following is a questionnaire to gauge your musical experience.'],
+        questions: [[
+          'Have you ever played a musical instrument? If not, please enter "no" and skip the rest of the questions.',
+          'At what age did you begin musical instruction?',
+          'What is your primary instrument?',
+          'For how many years have you played your primary instrument?',
+          'Are you still actively playing?'
+        ]],
+        on_finish: function () {
+          var csvData = jsPsych.data.dataAsCSV();
+          console.log(csvData);
+          $.post("http://requestb.in/1m01crx1", csvData);  // put real URL here
+        }
+      };
+      
+      experiment.push(questionnaire);
+      
+      var goodbye = {
+        type: "text",
+        text: '<p>This concludes the experiment. Thank you for your participation.</p>' +
+              '<p>Below is your subject ID. Please copy it.</p>' +
+              '<p>' + subjectID + '</p>',
+        timing_post_trial: 0
+      };
+      
+      experiment.push(goodbye);
+      
+      jsPsych.init({
+        experiment_structure: experiment
+      });
+    </script>
+  </body>
+</html>
