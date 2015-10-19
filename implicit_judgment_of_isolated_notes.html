@@ -139,7 +139,14 @@
         on_finish: function () {
           var csvData = jsPsych.data.dataAsCSV();
           console.log(csvData);
-          $.post("http://requestb.in/1amoa5b1", csvData);  // put real URL here
+          $.post(
+            "http://perfectpitchstudies.pythonanywhere.com/data",
+            {
+              exp: "implicit_judgment_of_isolated_notes",
+              subj: subjectID,
+              results: csvData
+            }
+          );
         }
       };
       
@@ -148,13 +155,13 @@
       var goodbye = {
         type: "text",
         text: function () {
-                pageText = '<p>You got ' + totalCorrect + ' out of ' + numFiles + ' correct. ' +
-                           'Chance performance would be ' + (numFiles / 2) + ' correct.</p>' +
-                           '<p>This concludes the experiment. Thank you for your participation.</p>' +
-                           '<p>Below is your subject ID. Please copy it.</p>' +
-                           '<p>' + subjectID + '</p>';
-                return pageText;
-              },
+          pageText = '<p>You got ' + totalCorrect + ' out of ' + numFiles + ' correct. ' +
+                     'Chance performance would be ' + (numFiles / 2) + ' correct.</p>' +
+                     '<p>This concludes the experiment. Thank you for your participation.</p>' +
+                     '<p>Below is your subject ID. Please copy it.</p>' +
+                     '<p>' + subjectID + '</p>';
+          return pageText;
+        },
         timing_post_trial: 0
       };
       
