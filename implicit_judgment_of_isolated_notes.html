@@ -13,10 +13,18 @@
   </head>
   <body>
     <script>
+      var userip;
+    </script>
+    <script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
+    <script>
       var i;
       var totalCorrect = 0;
       
-      var subjectID = Date.now();
+      var timestamp = Date.now();
+      var subjectID = userip + "-" + timestamp;
+      if (!subjectID) {
+        subjectID = timestamp;
+      }
       jsPsych.data.addProperties({subject: subjectID});
       
       var experiment = [];
@@ -139,13 +147,14 @@
         on_finish: function () {
           var csvData = jsPsych.data.dataAsCSV();
           console.log(csvData);
+          var formData = {
+            exp: "implicit_judgment_of_isolated_notes",
+            subj: subjectID,
+            results: csvData
+          };
           $.post(
             "http://perfectpitchstudies.pythonanywhere.com/data",
-            {
-              exp: "implicit_judgment_of_isolated_notes",
-              subj: subjectID,
-              results: csvData
-            }
+            formData
           );
         }
       };
@@ -155,11 +164,11 @@
       var goodbye = {
         type: "text",
         text: function () {
-          pageText = '<p>You got ' + totalCorrect + ' out of ' + numFiles + ' correct. ' +
-                     'Chance performance would be ' + (numFiles / 2) + ' correct.</p>' +
-                     '<p>This concludes the experiment. Thank you for your participation.</p>' +
-                     '<p>Below is your subject ID. Please copy it.</p>' +
-                     '<p>' + subjectID + '</p>';
+          var pageText = '<p>You got ' + totalCorrect + ' out of ' + numFiles + ' correct. ' +
+                         'Chance performance would be ' + (numFiles / 2) + ' correct.</p>' +
+                         '<p>This concludes the experiment. Thank you for your participation.</p>' +
+                         '<p>Below is your subject ID. Please copy it.</p>' +
+                         '<p>' + subjectID + '</p>';
           return pageText;
         },
         timing_post_trial: 0
