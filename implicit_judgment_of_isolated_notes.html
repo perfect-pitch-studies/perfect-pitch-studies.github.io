@@ -35,11 +35,22 @@
       var consent = {
         type: "single-stim",
         stimuli: [folder + "consent.png"],
-        prompt: '<div style="text-align: center">If you agree, please press any key to continue on to the study.</div>',
-        timing_post_trial: 0
-      }
+        prompt: '<div style="text-align: center"><p>If you agree, please press any key to continue on to the study.</p></div>',
+        timing_post_trial: 1000
+      };
       
       experiment.push(consent);
+      
+      var volumeTest = {
+        type: "single-audio",
+        stimuli: [folder + "volumetest.wav"],
+        timing_response: 10000,
+        response_ends_trial: false,
+        prompt: "<p>Before we begin, please adjust your volume so that the sound currently being played is at a comfortable listening level.</p>",
+        timing_post_trial: 0
+      };
+      
+      experiment.push(volumeTest);
       
       var welcome = {
         type: "text",
