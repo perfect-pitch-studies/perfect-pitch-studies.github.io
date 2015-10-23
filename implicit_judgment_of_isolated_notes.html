@@ -18,11 +18,13 @@
     <script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
     <script>
       var i;
+      var subjectID;
       var totalCorrect = 0;
       
       var timestamp = Date.now();
-      var subjectID = userip + "-" + timestamp;
-      if (!subjectID) {
+      if (userip) {
+        subjectID = userip + "-" + timestamp;
+      } else {
         subjectID = timestamp;
       }
       jsPsych.data.addProperties({subject: subjectID});
@@ -45,8 +47,7 @@
       var folder = "implicit_judgment_of_isolated_notes_stimuli/";
       var files = ['A0.wav', 'A#0.wav', 'B0.wav', 'C0.wav', 'C#0.wav', 'D0.wav', 'D#0.wav', 'E0.wav', 'F0.wav', 'F#0.wav', 'G0.wav', 'G#0.wav', 'A50.wav', 'A#50.wav', 'B50.wav', 'C50.wav', 'C#50.wav', 'D50.wav', 'D#50.wav', 'E50.wav', 'F50.wav', 'F#50.wav', 'G50.wav', 'G#50.wav', 'tA0.wav', 'tA#0.wav', 'tB0.wav', 'tC0.wav', 'tC#0.wav', 'tD0.wav', 'tD#0.wav', 'tE0.wav', 'tF0.wav', 'tF#0.wav', 'tG0.wav', 'tG#0.wav', 'tA50.wav', 'tA#50.wav', 'tB50.wav', 'tC50.wav', 'tC#50.wav', 'tD50.wav', 'tD#50.wav', 'tE50.wav', 'tF50.wav', 'tF#50.wav', 'tG50.wav', 'tG#50.wav', 'pA0.wav', 'pA#0.wav', 'pB0.wav', 'pC0.wav', 'pC#0.wav', 'pD0.wav', 'pD#0.wav', 'pE0.wav', 'pF0.wav', 'pF#0.wav', 'pG0.wav', 'pG#0.wav', 'pA50.wav', 'pA#50.wav', 'pB50.wav', 'pC50.wav', 'pC#50.wav', 'pD50.wav', 'pD#50.wav', 'pE50.wav', 'pF50.wav', 'pF#50.wav', 'pG50.wav', 'pG#50.wav', 'vA0.wav', 'vA#0.wav', 'vB0.wav', 'vC0.wav', 'vC#0.wav', 'vD0.wav', 'vD#0.wav', 'vE0.wav', 'vF0.wav', 'vF#0.wav', 'vG0.wav', 'vG#0.wav', 'vA50.wav', 'vA#50.wav', 'vB50.wav', 'vC50.wav', 'vC#50.wav', 'vD50.wav', 'vD#50.wav', 'vE50.wav', 'vF50.wav', 'vF#50.wav', 'vG50.wav', 'vG#50.wav'];
       
-      // uncomment for testing final screens:
-      // files = files.slice(0, 2);
+      // files = files.slice(0, 2);  // uncomment for testing final screens:
       
       var numFiles = files.length;
       
@@ -148,12 +149,17 @@
           var csvData = jsPsych.data.dataAsCSV();
           console.log(csvData);
           var formData = {
-            exp: "implicit_judgment_of_isolated_notes",
+            exp: "implicit_judgment_of_isolated_notes",  // comment out for testing
+            // exp: "TEST",  // uncomment for testing
             subj: subjectID,
             results: csvData
           };
           $.post(
             "http://perfectpitchstudies.pythonanywhere.com/data",
+            formData
+          );
+          $.post(
+            "http://205.208.68.194/data",
             formData
           );
         }
