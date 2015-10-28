@@ -111,7 +111,7 @@
         
         var filePath = decodeURIComponent(stimulus);
         var correct = filePath.indexOf("50") > -1 ? "out" : "in";
-        var correctKeyPress = correct == "in" ? 81 : 80;
+        var correctKeyPress = correct === "in" ? 81 : 80;
         if (filePath.indexOf("/p") > -1) {
           timbre = "piano";
         } else if (filePath.indexOf("/v") > -1) {
@@ -138,7 +138,7 @@
           timing_post_trial: 0,
           on_finish: function (trialData) {
             var keyPress = trialData.key_press;
-            var wasCorrect = keyPress == correctKeyPress;
+            var wasCorrect = keyPress === correctKeyPress;
             if (wasCorrect) {
               totalCorrect += 1;
             }
@@ -189,15 +189,17 @@
       experiment.push(questionnaire);
       
       var goodbye = {
-        type: "text",
-        text: function () {
+        type: "single-stim",
+        stimuli: function () {
           var pageText = '<p>You got ' + totalCorrect + ' out of ' + numFiles + ' correct. ' +
                          'Chance performance would be ' + (numFiles / 2) + ' correct.</p>' +
                          '<p>This concludes the experiment. Thank you for your participation.</p>' +
                          '<p>Below is your subject ID. Please copy it.</p>' +
                          '<p>' + subjectID + '</p>';
-          return pageText;
+          return [pageText];
         },
+        is_html: true,
+        response_ends_trial: false,
         timing_post_trial: 0
       };
       
