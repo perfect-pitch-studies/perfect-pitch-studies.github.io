@@ -139,7 +139,7 @@
           timing_post_trial: 0,
           on_finish: function (trialData) {
             var keyPress = trialData.key_press;
-            var wasCorrect = keyPress === correctKeyPress;
+            var wasCorrect = (keyPress === trialData.correct_key_press);
             if (wasCorrect) {
               totalCorrect += 1;
             }
