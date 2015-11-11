@@ -8,7 +8,7 @@ jspsych-4.3/tests_examples/
 !assets/
 !index.html
 
-!implicit_judgment_of_isolated_notes_stimuli/
+!implicit_judgment_of_isolated_notes_stimuli*/
 !implicit_judgment_of_isolated_notes.html
 
 !mturk_*
