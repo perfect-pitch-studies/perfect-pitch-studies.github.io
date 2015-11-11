@@ -72,7 +72,7 @@
         'id': 'jspsych-survey-text-next',
         'class': 'jspsych-survey-text'
       }));
-      $("#jspsych-survey-text-next").html('Submit Answers');
+      $("#jspsych-survey-text-next").html('Submit');
       $("#jspsych-survey-text-next").click(function() {
         // measure response time
         var endTime = (new Date()).getTime();

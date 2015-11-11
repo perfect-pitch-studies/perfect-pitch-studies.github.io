@@ -135,7 +135,7 @@
         'id': 'jspsych-survey-likert-next',
         'class': 'jspsych-survey-likert'
       }));
-      $("#jspsych-survey-likert-next").html('Submit Answers');
+      $("#jspsych-survey-likert-next").html('Submit');
       $("#jspsych-survey-likert-next").click(function() {
         // measure response time
         var endTime = (new Date()).getTime();
