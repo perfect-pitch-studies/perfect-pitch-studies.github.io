@@ -85,7 +85,7 @@
       var welcome = {
         type: "text",
         text: '<p>Welcome to the experiment.</p>' +
-              '<p>On each trial, you will hear a single tone and be asked to identify the name of the note.</p>' +
+              '<p>On each trial, you will hear a single tone and be asked to identify the name of the note within 5 seconds.</p>' +
               '<p>When you are ready to begin, press any key.</p>',
         timing_post_trial: 500
       };
@@ -155,7 +155,7 @@
                 
         var response = {
           type: "survey-likert",
-          questions: [['Please click on the name of the note you just heard.']],
+          questions: [['Please click on the name of the note you just heard, then click on the "Submit" button. This screen will time out after 5 seconds.']],
           labels: [[['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']]],
           intervals: [[12]],
           data: [{
@@ -169,17 +169,22 @@
             var wasCorrect = false;
             var wasOffByOne = false;
             var answer = JSON.parse(trialData.responses).Q0;
-            var numAnswer = answer - 1;  // jsPsych's likert scale starts at 1
-            wasCorrect = (numAnswer === correctAnswer);
-            if (wasCorrect) {
-              totalAbsCorrect += 1;
-              totalScore += 1;
-            } else {
-              wasOffByOne = (pitchDistance(numAnswer, correctAnswer) === 1);
-              if (wasOffByOne) {
-                totalOneOff += 1;
-                totalScore += 0.5;
+            var numAnswer;
+            if (answer) {
+              numAnswer = answer - 1;  // jsPsych's likert scale starts at 1
+              wasCorrect = (numAnswer === correctAnswer);
+              if (wasCorrect) {
+                totalAbsCorrect += 1;
+                totalScore += 1;
+              } else {
+                wasOffByOne = (pitchDistance(numAnswer, correctAnswer) === 1);
+                if (wasOffByOne) {
+                  totalOneOff += 1;
+                  totalScore += 0.5;
+                }
               }
+            } else {
+              numAnswer = "";
             }
             jsPsych.data.addDataToLastTrial({
               answer: numAnswer,
@@ -190,7 +195,8 @@
               total_score: totalScore
             });
           },
-          timing_post_trial: 500
+          timing_post_trial: 500,
+          timing_response: 5000
         };
         
         var chunk = {

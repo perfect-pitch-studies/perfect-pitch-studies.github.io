@@ -24,7 +24,8 @@
           questions: params.questions[i],
           labels: params.labels[i],
           intervals: params.intervals[i],
-          show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks
+          show_ticks: (typeof params.show_ticks === 'undefined') ? true : params.show_ticks,
+          timing_response: params.timing_response || -1
         });
       }
       return trials;
@@ -37,6 +38,12 @@
       // it with the output of the function
       trial = jsPsych.pluginAPI.evaluateFunctionParameters(trial);
 
+      // this array holds handlers from setTimeout calls
+      // that need to be cleared if the trial ends early
+      var setTimeoutHandlers = [];
+      
+      var timeUp = false;
+      
       // show preamble text
       display_element.append($('<div>', {
         "id": 'jspsych-survey-likert-preamble',
@@ -141,11 +148,21 @@
         var endTime = (new Date()).getTime();
         var response_time = endTime - startTime;
 
+        // kill any remaining setTimeout handlers
+        for (var i = 0; i < setTimeoutHandlers.length; i++) {
+          clearTimeout(setTimeoutHandlers[i]);
+        }
+        
         // create object to hold responses
         var question_data = {};
         $("div.jspsych-survey-likert-slider").each(function(index) {
           var id = "Q" + index;
-          var val = $(this).slider("value");
+          var val;
+          if (!timeUp) {
+            val = $(this).slider("value");
+          } else {
+            val = "";
+          }
           var obje = {};
           obje[id] = val;
           $.extend(question_data, obje);
@@ -164,6 +181,16 @@
       });
 
       var startTime = (new Date()).getTime();
+      
+      // end trial if time limit is set
+      if (trial.timing_response > 0) {
+        var t2 = setTimeout(function() {
+          timeUp = true;
+          $("#jspsych-survey-likert-next").click();
+          timeUp = false;
+        }, trial.timing_response);
+        setTimeoutHandlers.push(t2);
+      }
     };
 
     return plugin;
