@@ -211,6 +211,7 @@
         type: "call-function",
         func: function () {
           var subjectPrefix;
+          var re;
           var csvData = jsPsych.data.dataAsCSV();
           console.log(csvData);
           scorePercent = (totalScore / numFiles) * 100;
@@ -224,6 +225,9 @@
             subjectPrefix = "D";
           }
           subjectCode = subjectPrefix + "-" + subjectID;
+          
+          re = new RegExp('"' + subjectID + '"', "g");
+          csvData = csvData.replace(re, '"' + subjectCode + '"');
           
           var formData = {
             exp: "AP_Screening_Test",  // comment out for testing
