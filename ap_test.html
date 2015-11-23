@@ -23,6 +23,7 @@
     <script>
       var subjectID;
       var subjectCode;
+      var trialCount = 1;
       var totalAbsCorrect = 0;
       var totalScore = 0;
       var totalOneOff = 0;
@@ -116,6 +117,17 @@
       // allStimuli = allStimuli.slice(0, 2);  // uncomment for testing
       var numFiles = allStimuli.length;
       
+      var trialCountDisplay = {
+        type: "single-stim",
+        stimuli: function () {
+          return '<p>Trial ' + trialCount + ' of ' + numFiles + '</p>';
+        },
+        is_html: true,
+        timing_response: 900,
+        response_ends_trial: false,
+        timing_post_trial: 100
+      };
+      
       var fixation = {
         type: "multi-stim-multi-response",
         stimuli: [["***", "**", "*"]],
@@ -171,6 +183,7 @@
             var answer = JSON.parse(trialData.responses).Q0;
             var numAnswer;
             if (answer) {
+              trialCount += 1;
               numAnswer = answer - 1;  // jsPsych's likert scale starts at 1
               wasCorrect = (numAnswer === correctAnswer);
               if (wasCorrect) {
@@ -201,7 +214,7 @@
         
         var chunk = {
           chunk_type: "linear",
-          timeline: [fixation, audio, response],
+          timeline: [trialCountDisplay, fixation, audio, response],
         };
         
         experiment.push(chunk);
