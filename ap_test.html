@@ -14,6 +14,8 @@
     <script src="jspsych-4.3/plugins/jspsych-survey-likert.js"></script>
     <script src="jspsych-4.3/plugins/jspsych-call-function.js"></script>
     <link href="jspsych-4.3/css/jspsych.css" rel="stylesheet" type="text/css">
+  </head>
+  <body>
     <script>
       var userip;
     </script>
@@ -279,8 +281,9 @@
       experiment.push(goodbye);
       
       jsPsych.init({
-        experiment_structure: experiment
+        experiment_structure: experiment,
+        show_progress_bar: true
       });
     </script>
-  </head>
+  </body>
 </html>
