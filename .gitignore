@@ -2,6 +2,7 @@ jspsych-4.3/tests_examples/
 
 _*
 *.txt
+*.py
 TEST.html
 NEW.html
 
