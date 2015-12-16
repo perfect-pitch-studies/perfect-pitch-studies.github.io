@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Intonation Judgments of Isolated Notes</title>
+    <title>Intonation Judgments</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jspsych-4.3/jspsych.js"></script>
     <script src="jspsych-4.3/plugins/jspsych-text.js"></script>
@@ -35,7 +35,7 @@
       
       var consent = {
         type: "single-stim",
-        stimuli: [folder + "mturk_consent.png"],
+        stimuli: [folder + "consent.png"],
         prompt: '<p>Please wait for the consent form to load. If you agree, please press any key to continue on to the study.</p>',
         timing_post_trial: 1000
       };
@@ -167,7 +167,7 @@
           'What is your primary instrument?',
           'For how many years have you played your primary instrument?',
           'Are you still actively playing?',
-          'Do you have absolute pitch?'
+          'Do you have absolute pitch?',
 		  'Please enter your email address if you are interested in being entered into a gift card raffle for participating in this experiment.'
         ]],
         on_finish: function () {
