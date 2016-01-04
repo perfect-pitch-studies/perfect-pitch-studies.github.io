@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Film_Perception</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="jspsych-4.3/jspsych.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-text.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-single-stim.js"></script>
+	<script src="jspsych-4.3/plugins/jspsych-multi-stim-multi-response.js"></script>
+    <link href="jspsych-4.3/css/jspsych.css" rel="stylesheet" type="text/css">
+	
+	<style>
+  body {
+    color: white;
+    background: black;
+  }
+</style>
+  </head>
+  <body>
+    <script>
+	
+	 var timestamp = Date.now();
+	
+	 var experiment = [];
+
+	  
+    //Welcome text
+      var welcome_text = {
+        type: "text",
+        text: '<p>Welcome to the experiment. </p><p>Before we begin, please turn up the brightness and volume on your computer.</p><p>Press enter to continue.</p>',
+        timing_post_trial: 0
+      };
+	  
+	  experiment.push(welcome_text);
+	  
+	//Encoding Instructions
+      var enc_instruction_text = {
+        type: "text",
+        text: '<p>In this experiment you will be asked to watch several short clips from various movies. There are 12 clips, and each clip is 30 seconds long. After you have seen all of the movie clips, you will be asked some basic questions.' +
+		'</p><p>When you are ready to begin watching the first movie clip, press ENTER.</p>',
+        timing_post_trial: 0
+      };
+      
+	  experiment.push(enc_instruction_text);
+      
+    //Encoding  
+	  var vid_stimuli = [
+		'<video src="CasablancaStim/CasablancaSourceClips/1.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/3.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/5.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/7.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/9.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/11.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t13.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t15.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t17.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t19.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t21.mp4" controls autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t23.mp4" controls autoplay></video>'
+	  ];
+
+	  var rand_vid_trials = jsPsych.randomization.repeat(vid_stimuli,1);
+      
+	  for(var i=0; i < rand_vid_trials.length; i++){
+      
+	  var video_encoding = {
+        type: "single-stim",
+        stimuli: [rand_vid_trials[i]],
+        is_html: true,
+        timing_response: 32000,
+        response_ends_trial: false
+      };
+      
+	var fixation = {
+        type: "multi-stim-multi-response",
+        stimuli: [["***", "**", "*"]],
+        is_html: true,
+        timing_stim: [500, 500, 500],
+        timing_response: 1500,
+        choices: [null, null, null],
+        response_ends_trial: false,
+        timing_post_trial: 0
+      };
+  
+       experiment.push(video_encoding);
+  	   experiment.push(fixation);
+  
+	  }
+
+	//Retrieval Instructions
+      var ret_instruction_text = {
+        type: "text",
+        text: '<p>You will now be presented with a series of still images. Some of these images have been taken from the movie clips you just watched. Other still images have been taken from movies that you did not just watch.</p>' + 
+		'<p> Your job is to make your best judgment as to whether the still image is from a movie clip that you just watched. If you think the still image comes from a movie you watched from the first part of the experiment, press "Q" on the keyboard. </p>' + 
+		'<p>If you think the still image does not come from a movie you watched in the first part of the experiment, press "P" on the keyboard.' +
+		'<p>When you are ready to see the first still image, press ENTER.</p>',
+        timing_post_trial: 0
+      };
+      
+	  experiment.push(ret_instruction_text);
+	 
+	//Retrieval 
+	  var still_stimuli = [
+		{
+			image: "CasablancaStim/Stills/1.bmp",
+			data: {response: 'old-music'}
+		},
+		{
+			image: "CasablancaStim/Stills/3.bmp",
+			data: {response: 'old-music'}
+		},
+		{
+			image: "CasablancaStim/Stills/5.bmp",
+			data: {response: 'old-music'}
+		},
+		{
+			image: "CasablancaStim/Stills/7.bmp",
+			data: {response: 'old-music'}
+		},
+		{
+			image: "CasablancaStim/Stills/9.bmp",
+			data: {response: 'old-music'}
+		},
+		{
+			image: "CasablancaStim/Stills/11.bmp",
+			data: {response: 'old-music'}
+		},
+		{
+			image: "CasablancaStim/Stills/13.bmp",
+			data: {response: 'old-silent'}
+		},
+		{
+			image: "CasablancaStim/Stills/15.bmp",
+			data: {response: 'old-silent'}
+		},
+		{
+			image: "CasablancaStim/Stills/17.bmp",
+			data: {response: 'old-silent'}
+		},
+		{
+			image: "CasablancaStim/Stills/19.bmp",
+			data: {response: 'old-silent'}
+		},
+		{
+			image: "CasablancaStim/Stills/21.bmp",
+			data: {response: 'old-silent'}
+		},
+		{
+			image: "CasablancaStim/Stills/23.bmp",
+			data: {response: 'old-silent'}
+		},
+		{
+			image: "CasablancaStim/Stills/2.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/4.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/6.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/8.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/10.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/12.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/14.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/16.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/18.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/20.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/22.bmp",
+			data: {response: 'new'}
+		},
+		{
+			image: "CasablancaStim/Stills/24.bmp",
+			data: {response: 'new'}
+		},
+	  ];
+	  
+	  var rand_still_trials = jsPsych.randomization.repeat(still_stimuli,1,true);
+	  
+      var still = {
+        type: "single-stim",
+        stimuli: rand_still_trials.image,
+        prompt: '<p>Does this come from a movie you saw in the first part? If yes, press "Q" on the keyboard. If no, press "P" on the keyboard.',
+		data: rand_still_trials.data,
+		choices: ['Q','P']
+      };
+      
+      experiment.push(still);
+
+      //Retrieval Instructions
+      var finish_text = {
+        type: "text",
+        text: '<p>Thank you for participating.</p><p> Your code for completing this experiment is ' + timestamp + '. Please paste this code into the appropriate box to receive payment.' +
+		'</p> To exit the experiment, press ENTER.</p>',
+        timing_post_trial: 0,
+		on_finish: function () {
+          var csvData = jsPsych.data.dataAsCSV();
+          console.log(csvData);
+          var formData = {
+            exp: "Casablanca",  // comment out for testing
+            //exp: "TEST",  // uncomment for testing
+            results: csvData
+          };
+          $.post(
+            "http://perfectpitchstudies.pythonanywhere.com/data",
+            formData
+          );
+          $.post(
+            "http://205.208.68.176/data",
+            formData
+          );
+        }
+      
+      };
+
+      experiment.push(finish_text);
+
+      
+      
+       jsPsych.init({
+        experiment_structure: experiment
+      });
+    </script>
+  </body>
+</html>
