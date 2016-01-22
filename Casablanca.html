@@ -23,8 +23,9 @@
 	var subject_id = Math.floor(Math.random()*100000);
 	var folder = "CasablancaStim/";
     var turkInfo = jsPsych.turk.turkInfo(); 
+	var i;
 
-
+	
 	 var experiment = [];
 
 	 //Consent Form 
@@ -580,19 +581,24 @@
 		},
 	  ];}
 	  
-	  var rand_still_trials = jsPsych.randomization.repeat(still_stimuli,1,true);
+	  var rand_still_trials = jsPsych.randomization.repeat(still_stimuli,1,true); 
+	  
+	
 	  
       var still = {
         type: "single-stim",
         stimuli: rand_still_trials.image,
 		data: rand_still_trials.data,
-		prompt: '<div style="position: fixed; bottom: 25%;"><p>"F" - not previously seen</p><p>"J" - previously seen</p></div>',
+		prompt: '<div style="position: fixed; bottom: 15%;"><p>"F" - not previously seen,<p></p> "J" - previously seen</p></div>',
 		choices: ['F','J'],
-		timing_post_trial: 1000
+		timing_post_trial: 1500
       };
       
+
       experiment.push(still);
-	  experiment.push(fixation);
+	 
+	  
+
 
       //Retrieval Instructions
       var finish_text = {
