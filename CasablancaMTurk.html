@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Film_Perception</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="jspsych-4.3/jspsych.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-text.js"></script>
+    <script src="jspsych-4.3/plugins/jspsych-single-stim.js"></script>
+	<script src="jspsych-4.3/plugins/jspsych-single-audio.js"></script>
+	<script src="jspsych-4.3/plugins/jspsych-multi-stim-multi-response.js"></script>
+    <link href="jspsych-4.3/css/jspsych.css" rel="stylesheet" type="text/css">
+	
+	<style>
+  body {
+    color: white;
+    background: black;
+  }
+</style>
+  </head>
+  <body>
+    <script>
+	
+	var condition = Math.floor(Math.random() * 4) + 1;
+	var subject_id = Math.floor(Math.random()*100000);
+	var folder = "CasablancaStim/";
+    var turkInfo = jsPsych.turk.turkInfo(); 
+	var i;
+
+	
+	 var experiment = [];
+
+	 //Consent Form 
+	 var consent = {
+        type: "single-stim",
+        stimuli: [folder + "consent.png"],
+        prompt: '<p>Please wait for the consent form to load. If you agree, please press any key to continue on to the study.</p>',
+        timing_post_trial: 1000
+      };	
+
+	  experiment.push(consent);
+	
+    //Welcome text
+      var volumeTest = {
+        type: "single-audio",
+        stimuli: [folder + "volumetest.wav"],
+        timing_response: 10000,
+        response_ends_trial: false,
+        prompt: "<p>Before we begin, please adjust your volume so that the sound currently being played is at a comfortable listening level.</p>",
+        timing_post_trial: 0
+      };
+      
+      experiment.push(volumeTest);
+	  
+	//Encoding Instructions
+      var enc_instruction_text = {
+        type: "text",
+        text: '<p>In this experiment you will be asked to watch several short clips from various movies. There are 12 clips, and each clip is 30 seconds long.</p>' +
+			' <p>Some of these clips will have accompanying music, while other clips will have no accompanying music. After you have seen all of the movie clips, you will be asked some basic questions about these clips.' +
+			'</p><p>When you are ready to begin watching the first movie clip, press any key.</p>',
+        timing_post_trial: 0
+      };
+      
+	  experiment.push(enc_instruction_text);
+    
+    var enc_wait_text = {
+        type: "single-stim",
+        stimuli: [["Please be patient while the video clips load. This should take about 30 seconds."]],
+        is_html: true,
+        timing_stim: [30000],
+        timing_response: 30000,
+        choices: [null],
+        response_ends_trial: false,
+        timing_post_trial: 0
+      };
+      
+	  experiment.push(enc_wait_text);
+      
+    //Encoding  
+	
+	// add condition information
+	
+	var vid_stimuli;
+	
+	if (condition === 1) {
+	  vid_stimuli = [
+		'<video src="CasablancaStim/CasablancaSourceClips/1.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/3.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/5.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/7.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/9.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/11.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t13.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t15.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t17.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t19.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t21.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t23.mp4" autoplay></video>'
+	  ]; }
+	  else if (condition === 2){
+	  vid_stimuli = [
+		'<video src="CasablancaStim/CasablancaSourceClips/2.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/4.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/6.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/8.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/10.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/12.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t14.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t16.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t18.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t20.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t22.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/t24.mp4" autoplay></video>'
+	  ]; }
+	  else if (condition === 3){
+	   vid_stimuli = [
+	  	'<video src="CasablancaStim/CasablancaSourceClips/t1.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t3.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t5.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t7.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t9.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t11.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/13.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/15.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/17.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/19.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/21.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/23.mp4" autoplay></video>'
+	  ]; }
+	  else {
+	   vid_stimuli = [
+		'<video src="CasablancaStim/CasablancaSourceClips/t2.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t4.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t6.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t8.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t10.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaSourceClips/t12.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/14.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/16.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/18.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/20.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/22.mp4" autoplay></video>',
+		'<video src="CasablancaStim/CasablancaVideoTargets/24.mp4" autoplay></video>'
+	  ]; }
+
+	  var rand_vid_trials = jsPsych.randomization.repeat(vid_stimuli,1);
+      
+	  for(var i=0; i < rand_vid_trials.length; i++){
+      
+	  var video_encoding = {
+        type: "single-stim",
+        stimuli: [rand_vid_trials[i]],
+        is_html: true,
+        timing_response: 32000,
+        response_ends_trial: false
+      };
+      
+	var fixation = {
+        type: "multi-stim-multi-response",
+        stimuli: [["***", "**", "*"]],
+        is_html: true,
+        timing_stim: [500, 500, 500],
+        timing_response: 1500,
+        choices: [null, null, null],
+        response_ends_trial: false,
+        timing_post_trial: 0
+      };
+  
+       experiment.push(video_encoding);
+  	   experiment.push(fixation);
+  
+	  }
+
+	//Retrieval Instructions
+      var ret_instruction_text1 = {
+        type: "text",
+        text: '<p>You will now be presented with a series of still images. Some of these images have been taken from the movie clips you just watched. Other still images have been taken from movies that you did not just watch.</p>' + 
+		'<p> Your job is to make your best judgment as to whether the still image is from a movie clip that you just watched.</p>' +
+		'</p><p>If you think the still image comes from a movie you watched from the first part of the experiment, press "J" on the keyboard. </p>' + 
+		'<p>If you think the still image does not come from a movie you watched in the first part of the experiment, press "F" on the keyboard.</p><p>To continue, press any key</p>',
+        timing_post_trial: 0
+      };
+      
+	  experiment.push(ret_instruction_text1);
+
+	  var ret_instruction_text2 = {
+        type: "text",
+        text: '<p>Since we are interested in how quickly you are able to make your decision, we ask that you rest your index fingers on the "J" and "F" keys before beginning and keep them there during the task to make sure that you are answering as quickly as possible.</p><p>When you are ready to see the first still image, press any key.</p>',
+        timing_post_trial: 0
+      };
+      
+	  experiment.push(ret_instruction_text2);
+	 
+	//Retrieval 
+	
+
+	
+	var still_stimuli;
+	
+	 if (condition === 1){
+	 
+	  still_stimuli = [
+		{
+			image: "CasablancaStim/Stills/1.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/3.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/5.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/7.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/9.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/11.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/13.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/15.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/17.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/19.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/21.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/23.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/2.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/4.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/6.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/8.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/10.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/12.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/14.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/16.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/18.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/20.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/22.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/24.png",
+			data: {response: 'new', correct: '70'}
+		},
+	  ]; }
+	  
+	  else if (condition === 2){
+	  
+	  still_stimuli = [
+		{
+			image: "CasablancaStim/Stills/2.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/4.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/6.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/8.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/10.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/12.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/14.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/16.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/18.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/20.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/22.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/24.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/1.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/3.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/5.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/7.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/9.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/11.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/13.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/15.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/17.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/19.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/21.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/23.png",
+			data: {response: 'new', correct: '70'}
+		},
+	  ];}
+	  
+	  else if (condition === 3){
+	  
+	  	  still_stimuli = [
+		{
+			image: "CasablancaStim/Stills/1.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/3.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/5.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/7.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/9.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/11.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/13.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/15.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/17.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/19.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/21.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/23.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/2.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/4.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/6.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/8.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/10.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/12.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/14.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/16.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/18.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/20.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/22.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/24.png",
+			data: {response: 'new', correct: '70'}
+		},
+	  ];}
+	  
+	  else {
+	  
+	  	  	still_stimuli = [
+		{
+			image: "CasablancaStim/Stills/2.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/4.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/6.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/8.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/10.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/12.png",
+			data: {response: 'old-silent', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/14.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/16.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/18.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/20.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/22.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/24.png",
+			data: {response: 'old-music', correct: '74'}
+		},
+		{
+			image: "CasablancaStim/Stills/1.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/3.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/5.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/7.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/9.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/11.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/13.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/15.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/17.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/19.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/21.png",
+			data: {response: 'new', correct: '70'}
+		},
+		{
+			image: "CasablancaStim/Stills/23.png",
+			data: {response: 'new', correct: '70'}
+		},
+	  ];}
+	  
+	  var rand_still_trials = jsPsych.randomization.repeat(still_stimuli,1,true); 
+	  
+	  
+      var still = {
+        type: "single-stim",
+        stimuli: rand_still_trials.image,
+		data: rand_still_trials.data,
+		prompt: '<div style="position: fixed; bottom: 15%;"><p>"F" - not previously seen,<p></p> "J" - previously seen</p></div>',
+		choices: ['F','J'],
+		timing_post_trial: 1500
+      };
+      
+
+      experiment.push(still);
+      
+      var ret_instruction_text3 = {
+        type: "text",
+        text: '<p>You will now be presented with the same series of still images as before.</p>' + 
+		'<p> This time, your job is to make your best judgment as to whether the still image is from a full-length feature film that you have watched in the past.</p>' +
+		'</p><p>If you think the still image comes from a movie you have watched in its entirety before this experiment, press "J" on the keyboard. </p>' + 
+		'<p>If you think the still image does not come from a movie you have watched in its entirety before this experiment, press "F" on the keyboard.</p><p>To continue, press any key</p>',
+        timing_post_trial: 0
+      };
+      
+	  experiment.push(ret_instruction_text3);
+	 
+	 
+      var still_recog2 = {
+        type: "single-stim",
+        stimuli: rand_still_trials.image,
+		data: rand_still_trials.data,
+		prompt: '<div style="position: fixed; bottom: 15%;"><p>"F" - not previously seen,<p></p> "J" - previously seen</p></div>',
+		choices: ['F','J'],
+		timing_post_trial: 1500
+      };
+
+      experiment.push(still_recog2);
+
+
+      //Finish Instructions
+      var finish_text = {
+        type: "text",
+        text: '<p>Thank you for participating.</p><p> Your code for completing this experiment is ' + subject_id + '. Please paste this code into the appropriate box to receive payment.' +
+		'</p> To exit the experiment, press any key.</p>',
+        timing_post_trial: 0,
+		on_finish: function () {
+          var csvData = jsPsych.data.dataAsCSV();
+          console.log(csvData);
+          var formData = {
+            exp: "Casablanca",  // comment out for testing
+            //exp: "TEST",  // uncomment for testing
+			subj: subject_id,
+			worker: turkInfo.workerId,
+			cond: condition,
+			results: csvData
+          };
+          $.post(
+            "http://perfectpitchstudies.pythonanywhere.com/data",
+            formData
+          );
+          $.post(
+            "http://205.208.68.176/data",
+            formData
+          );
+        }
+      
+      };
+
+      experiment.push(finish_text);
+
+	  jsPsych.preloadImages(rand_still_trials.image, function(){ startExperiment(); });
+	  
+      function startExperiment(){
+		jsPsych.init({
+			experiment_structure: experiment
+		});
+	 }
+	 
+    </script>
+  </body>
+</html>
