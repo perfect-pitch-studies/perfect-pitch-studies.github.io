@@ -139,9 +139,9 @@
           return '<p>Trial ' + trialCount + ' of ' + numFiles + '</p>';
         },
         is_html: true,
-        timing_response: 900,
+        timing_response: 1000,
         response_ends_trial: false,
-        timing_post_trial: 100
+        timing_post_trial: 0
       };
       
       var fixation = {
@@ -155,15 +155,13 @@
         timing_post_trial: 0
       };
       
-      /*
       var whiteNoise = {
         type: "single-audio",
-        stimulus: folder + "whitenoise.wav",
-        timing_response: 10000,
+        stimulus: folder + "volumetest.wav", // "whitenoise.wav",
+        timing_response: 2000,
         response_ends_trial: false,
-        timing_post_trial: 1000
+        timing_post_trial: 500
       };
-      */
       
       
       for (var i = 0; i < numFiles; i++) {
@@ -241,6 +239,7 @@
         experiment.push(audio);
         experiment.push(response);
         experiment.push(feedback);
+        experiment.push(whiteNoise);
       }
       
       
@@ -267,7 +266,7 @@
           csvData = csvData.replace(re, '"' + subjectCode + '"');
           
           var formData = {
-            // exp: "AP_Feedback_Test",  // comment out for testing
+            // exp: "ap_test_with_feedback",  // comment out for testing
             exp: "TEST",  // uncomment for testing
             subj: subjectCode,
             results: csvData
@@ -276,6 +275,7 @@
             "http://perfectpitchstudies.pythonanywhere.com/data",
             formData
           );
+          /*
           $.post(
             "http://205.208.68.176/data",
             formData
@@ -284,6 +284,7 @@
             "http://205.208.93.97/data",
             formData
           );
+          */
         },
         timing_post_trial: 0
       };
